@@ -74,9 +74,14 @@ public class TransactionController {
     }
 
     @RequestMapping(value = "/agent/fetch", method = RequestMethod.GET)
-    public ResponseEntity getAllAgentTransaction(Principal principal){
+    public Map getAllAgentTransaction(Principal principal, @RequestParam Map<String, String> allRequestParams){
+
+        int draw = Integer.parseInt(allRequestParams.get("draw"));
+        int start = Integer.parseInt(allRequestParams.get("start"));
+        int length = Integer.parseInt(allRequestParams.get("length"));
+
         User user = userService.getUserByUsername(principal.getName());
-        return transactionService.findByDispatcherAgent(user);
+        return transactionService.findByDispatcherAgentD(user, start/length, length, draw);
     }
 
     @RequestMapping(value = "/deposit", method = RequestMethod.GET)

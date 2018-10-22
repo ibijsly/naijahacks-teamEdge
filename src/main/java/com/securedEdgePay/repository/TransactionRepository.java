@@ -2,6 +2,8 @@ package com.securedEdgePay.repository;
 
 import com.securedEdgePay.model.Transaction;
 import com.securedEdgePay.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,5 +16,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     public List<Transaction> findByReceiverName(String receiverName);
 
     public List<Transaction> findByDispatcherAgent(User dispatcherAgent);
+    public Page<Transaction> findByDispatcherAgentD(User dispatcherAgent, Pageable pageable);
     public Transaction findByTransactionId(String transactionId);
 }

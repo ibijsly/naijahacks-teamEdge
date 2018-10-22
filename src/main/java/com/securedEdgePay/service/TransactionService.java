@@ -3,16 +3,21 @@ package com.securedEdgePay.service;
 import com.securedEdgePay.model.ResponseModel;
 import com.securedEdgePay.model.Transaction;
 import com.securedEdgePay.model.User;
-import com.securedEdgePay.model.Wallet;
 import com.securedEdgePay.repository.StatusRepository;
 import com.securedEdgePay.repository.TransactionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TransactionService {
@@ -85,6 +90,22 @@ public class TransactionService {
             ex.printStackTrace();
             return new ResponseEntity<ResponseModel>( new ResponseModel("99", "Error Occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public Map<String, Object> findByDispatcherAgentD(User user, int startPage, int pageSize, int draw){
+
+        Pageable pageable = new PageRequest(startPage, pageSize, new Sort(Sort.Direction.DESC, "createdAt"));
+        Page<Transaction> result = null;
+        result = transactionRepository.findByDispatcherAgentD(user, pageable);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("data", result.getContent());
+        response.put("draw", draw);
+        response.put("recordsTotal", result.getTotalElements());
+        response.put("recordsFiltered", result.getTotalElements());
+
+        return response;
     }
 
     public ResponseEntity<ResponseModel> findByReceiverId(String id){
