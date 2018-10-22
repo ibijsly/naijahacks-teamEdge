@@ -1,43 +1,49 @@
 package com.securedEdgePay.model;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Agent extends User {
-    private String location;
-    private String accountName;
-    private long accountNumber;
-    private long bvn;
 
-    public String getLocation() {
-        return location;
+    @OneToOne
+    @JoinColumn(name = "bank_id", referencedColumnName = "id")
+    private Bank bank;
+
+    private String state;
+    private String lg;
+    private String address;
+
+    public Bank getBank() {
+        return bank;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public String getState() {
+        return state;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setState(String state) {
+        this.state = state;
     }
 
-    public long getAccountNumber() {
-        return accountNumber;
+    public String getLg() {
+        return lg;
     }
 
-    public void setAccountNumber(long accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setLg(String lg) {
+        this.lg = lg;
     }
 
-    public long getBvn() {
-        return bvn;
+    public String getAddress() {
+        return address;
     }
 
-    public void setBvn(long bvn) {
-        this.bvn = bvn;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -57,6 +57,10 @@ public class User implements UserDetails, Serializable {
 //    @JsonManagedReference
     private RoleGroup roleGroup;
 
+    @OneToOne
+    @JoinColumn(name = "wallet", referencedColumnName = "id")
+    private Wallet wallet;
+
     private String phone;
 
     public User() {
@@ -206,6 +210,14 @@ public class User implements UserDetails, Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     @Override

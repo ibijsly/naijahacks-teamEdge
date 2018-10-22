@@ -13,7 +13,9 @@ public class Transaction implements Serializable {
     private String transactionId;
     private double amount;
     private String senderName;
+    private String senderPhone;
 
+    /*This is to be used if the sender is a registered User*/
     @ManyToOne
     @JoinColumn(name = "sender_id", referencedColumnName = "id")
     private User sender;
@@ -21,11 +23,12 @@ public class Transaction implements Serializable {
     private String receiverIdType;
     private String receiverId;
     private String receiverName;
+    private String receiverPhone;
 
     private Date transactionInitiationDate;
     private Date ValueReceivedDate;
 
-    /*This is the agent the receiver collected from*/
+    /*This is the agent the receiver collected from or the receiver himself if he is a registered User*/
     @ManyToOne
     @JoinColumn(name = "dispatcher_agent", referencedColumnName = "id")
     private User dispatcherAgent;
@@ -68,6 +71,14 @@ public class Transaction implements Serializable {
         this.senderName = senderName;
     }
 
+    public String getSenderPhone() {
+        return senderPhone;
+    }
+
+    public void setSenderPhone(String senderPhone) {
+        this.senderPhone = senderPhone;
+    }
+
     public User getSender() {
         return sender;
     }
@@ -98,6 +109,14 @@ public class Transaction implements Serializable {
 
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
+    }
+
+    public String getReceiverPhone() {
+        return receiverPhone;
+    }
+
+    public void setReceiverPhone(String receiverPhone) {
+        this.receiverPhone = receiverPhone;
     }
 
     public Date getTransactionInitiationDate() {

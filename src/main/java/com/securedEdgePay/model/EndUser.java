@@ -1,15 +1,20 @@
 package com.securedEdgePay.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 @Entity
 public class EndUser extends User{
     private String nin;
     private String vin;
 
+    @OneToOne
+    @JoinColumn(name = "bank_id", referencedColumnName = "id")
+    private Bank bank;
+
     @Transient
     private String base64Image;
+
+    @Column(nullable = true)
     private byte[] photo;
 
     public String getNin() {
@@ -42,5 +47,13 @@ public class EndUser extends User{
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 }

@@ -4,11 +4,15 @@ package com.securedEdgePay.service;
 import com.securedEdgePay.model.Agent;
 import com.securedEdgePay.model.ResponseModel;
 import com.securedEdgePay.repository.AgentRepository;
+import com.securedEdgePay.repository.BankRepository;
 import com.securedEdgePay.repository.UserRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.Date;
 
@@ -16,12 +20,17 @@ import java.util.Date;
 public class AgentService {
     private final UserRepository userRepository;
     private final AgentRepository agentRepository;
+    private final WalletService walletService;
+    private final BankRepository bankRepository;
 
-    public AgentService(UserRepository userRepository, AgentRepository agentRepository) {
+    public AgentService(UserRepository userRepository, AgentRepository agentRepository, WalletService walletService, BankRepository bankRepository) {
         this.userRepository = userRepository;
         this.agentRepository = agentRepository;
+        this.walletService = walletService;
+        this.bankRepository = bankRepository;
     }
 
+    @Transactional
     public ResponseEntity<ResponseModel> addAgent(Agent agent, Principal principal){
         try {
             if (check(agent))
@@ -29,8 +38,17 @@ public class AgentService {
 
 //            agent.setRegisteredBy(userService.getUserByUsername(principal.getName()).getId());
 //            endUser.setRoleGroup(roleGroupService.getRoleGroup(endUser.getRoleGroupType()));
+            agent.setUsername(agent.getEmail());
             agent.setCreatedAt(new Date());
+            agent.setPassword(new BCryptPasswordEncoder().encode("welcome"));
+            agent.setEnabled(true);
+            bankRepository.save(agent.getBank());
             agentRepository.save(agent);
+            walletService.createWallet(agent);
+
+
+            LoggerFactory.getLogger(AgentService.class).info("Agent Created Successfully");
+
             return new ResponseEntity<ResponseModel>( new ResponseModel("00", "Success", agent), HttpStatus.OK);
         }catch (Exception ex){
             ex.printStackTrace();
