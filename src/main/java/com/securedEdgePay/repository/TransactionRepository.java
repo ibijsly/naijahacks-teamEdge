@@ -13,9 +13,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     public List<Transaction> findBySenderName(String sender);
 
     public List<Transaction> findByReceiverId(String receiverId);
+    public Page<Transaction> findByReceiverId(String receiverId, Pageable pageable);
     public List<Transaction> findByReceiverName(String receiverName);
 
     public List<Transaction> findByDispatcherAgent(User dispatcherAgent);
-    public Page<Transaction> findByDispatcherAgentD(User dispatcherAgent, Pageable pageable);
+    public Page<Transaction> findByDispatcherAgent(User dispatcherAgent, Pageable pageable);
     public Transaction findByTransactionId(String transactionId);
 }

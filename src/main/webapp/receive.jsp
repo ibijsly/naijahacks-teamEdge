@@ -28,6 +28,9 @@
       <link href="/assets/themify-icons/themify-icons.css" rel="stylesheet" type="text/css"/>
       <!-- End Global Mandatory Style
          =====================================================================-->
+     <!-- dataTables css -->
+           <link href="/assets/plugins/datatables/dataTables.min.css" rel="stylesheet" type="text/css"/>
+
       <!-- Start Theme Layout Style
          =====================================================================-->
       <!-- Theme style -->
@@ -38,7 +41,7 @@
          =====================================================================-->
 
      <style>
-        #details, #payMode, #makepayment, #biometrics{
+        #details, #payMode, #makepayment, #biometrics, #second{
             display: none;
         }
 
@@ -90,7 +93,7 @@
             </section>
             <!-- Main content -->
             <section class="content">
-               <div class="row">
+               <div class="row" id = "first">
                   <div class="col-sm-4 col-sm-offset-4" id = "verification">
                      <div class="panel lobidisable panel-bd">
                         <div class="panel-heading">
@@ -157,130 +160,42 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-sm-8 col-sm-offset-2" id = "makepayment">
-                     <div class="panel lobidisable panel-bd">
+               </div>
+
+               <div class="row"  id = "second">
+                  <div class="col-sm-12">
+                     <div class="panel panel-bd lobidrag">
                         <div class="panel-heading">
-                           <div class="panel-title">
-                              <h4>Details</h4>
+                           <div class="btn-group" id="buttonexport">
+                              <a href="#">
+                                 <h4>Transaction list</h4>
+                              </a>
                            </div>
                         </div>
                         <div class="panel-body">
-                            <!-- This will contain the Receiver Details received from the API -->
-                            <form>
-                              <div class="form-group">
-                                 <label>Identity</label>
-                                 <input type="text" class="form-control" placeholder="" id = "identity" readonly required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Identity Type</label>
-                                 <input type="text" class="form-control" placeholder="" id = "idType" value = "NIN" readonly required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Surname</label>
-                                 <input type="text" class="form-control" placeholder="" id = "surname" readonly required>
-                              </div>
-                              <div class="form-group">
-                                 <label>First Name</label>
-                                 <input type="text" class="form-control" placeholder="" id = "fname" readonly required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Middle Name</label>
-                                 <input type="text" class="form-control" placeholder="" id = "mname" readonly required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Phone</label>
-                                 <input type="text" class="form-control" placeholder="" id = "phone" required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Sender Name</label>
-                                 <input type="text" class="form-control" placeholder="Abraham Ibrahim Sangodeyi" id = "senderName" required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Sender Phone</label>
-                                 <input type="text" class="form-control" placeholder="09089898989" id = "senderPhone" required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Sender Email</label>
-                                 <input type="email" class="form-control" placeholder="09089898989" id = "senderEmail" required>
-                              </div>
-                              <div class="form-group">
-                                 <label>Amount</label>
-                                 <input type="number" class="form-control" min = "10" placeholder="60000" id = "amount" required>
-                              </div>
+                           <!-- ./Plugin content:powerpoint,txt,pdf,png,word,xl -->
+                           <div class="table-responsive">
+                              <table id="transactionTable" class="table table-bordered table-striped table-hover">
+                                 <thead>
+                                    <tr class="info">
+                                       <th>transaction Id</th>
+                                       <th>Sender Name</th>
+                                       <th>Sender Phone</th>
+                                       <th>Receiver Id</th>
+                                       <th>Receiver Type</th>
+                                       <th>Receiver Name</th>
+                                       <th>Receiver Phone</th>
+                                       <th>Amount</th>
+                                       <th>status</th>
+                                       <th>transaction Date</th>
+                                       <th>Received Date</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
 
-                              <!-- Agent -->
-                              <div class="form-group">
-                                   <button type="button" class="btn btn-add" id = "send"><i class="fa fa-check"></i> Send
-                                   </button>
-                              </div>
-
-                              <!-- End User -->
-                              <div class="form-group">
-                                   <button type="button" class="btn btn-add" id = "endSend"><i class="fa fa-check"></i> Send
-                                   </button>
-                              </div>
-                            </form>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-sm-4" id = "details">
-                     <div class="panel lobidisable panel-bd">
-                        <div class="panel-heading">
-                           <div class="panel-title">
-                              <h4>Quote</h4>
+                                 </tbody>
+                              </table>
                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <form>
-                              <div class="form-group">
-                                 <label>NIN / VIN</label>
-                                 <input type="text" class="form-control" placeholder="19618432781" id = "rid" readonly required>
-                              </div>
-
-                              <div class="form-group">
-                                 <label>Name</label>
-                                 <input type="text" class="form-control" placeholder="19618432781" id = "rName" readonly required>
-                              </div>
-
-                              <div class="form-group">
-                                 <label>Amount</label>
-                                 <input type="text" class="form-control" placeholder="19618432781" id = "rAmount" readonly required>
-                              </div>
-
-                              <div class="form-group">
-                                 <label>Convenience Fee</label>
-                                 <input type="text" class="form-control" placeholder="19618432781" id = "rFee" readonly required>
-                              </div>
-
-                              <div class="form-group">
-                                 <label>Payable</label>
-                                 <input type="text" class="form-control" placeholder="19618432781" id = "rPay" readonly required>
-                              </div>
-                           </form>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-sm-8" id = "payMode">
-                     <div class="panel lobidisable panel-bd">
-                        <div class="panel-heading">
-                           <div class="panel-title">
-                              <h4>Mode of Payment</h4>
-                           </div>
-                        </div>
-                        <div class="panel-body">
-                            <!-- This will contain The various means of payments (Wallet, Paystack, Masterpass) -->
-                            <div id = "payImage">
-                                <img src = "/assets/image/wallet.jpg" width = "100%" height = "200px" id = "wallet"/>
-                                <p>Wallet</p>
-                            </div>
-                            <div id = "payImage">
-                                <img src = "/assets/image/card.jpg" width = "100%" height = "200px" id = "card" />
-                                <p>Card Payment</p>
-                            </div>
-                            <div id = "payImage">
-                                <img src = "/assets/image/qr.png" width = "100%" height = "200px" id = "qrcode" />
-                                <p>Masterpass</p>
-                            </div>
                         </div>
                      </div>
                   </div>
@@ -319,6 +234,10 @@
       <script src="/assets/dist/js/custom.js" type="text/javascript"></script>
       <!-- End Core Plugins
          =====================================================================-->
+      <!-- dataTables js -->
+      <script src="/assets/plugins/datatables/dataTables.min.js" type="text/javascript"></script>
+      <script src="https://cdn.datatables.net/buttons/1.0.3/js/buttons.colVis.js"></script>
+
       <!-- Start Theme label Script
          =====================================================================-->
       <!-- Dashboard js -->

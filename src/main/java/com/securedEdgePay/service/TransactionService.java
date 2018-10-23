@@ -94,12 +94,15 @@ public class TransactionService {
 
     public Map<String, Object> findByDispatcherAgentD(User user, int startPage, int pageSize, int draw){
 
-        Pageable pageable = new PageRequest(startPage, pageSize, new Sort(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = new PageRequest(startPage, pageSize, new Sort(Sort.Direction.DESC, "transactionInitiationDate"));
         Page<Transaction> result = null;
-        result = transactionRepository.findByDispatcherAgentD(user, pageable);
+        result = transactionRepository.findByDispatcherAgent(user, pageable);
 
         Map<String, Object> response = new HashMap<>();
 
+        for (Transaction tranx:result.getContent()) {
+            System.out.println(tranx.getAmount());
+        }
         response.put("data", result.getContent());
         response.put("draw", draw);
         response.put("recordsTotal", result.getTotalElements());
@@ -121,6 +124,25 @@ public class TransactionService {
             ex.printStackTrace();
             return new ResponseEntity<ResponseModel>( new ResponseModel("99", "Error Occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public Map<String, Object> findByReceiverId(String id, int startPage, int pageSize, int draw){
+        Pageable pageable = new PageRequest(startPage, pageSize, new Sort(Sort.Direction.DESC, "transactionInitiationDate"));
+        Page<Transaction> result = null;
+        result = transactionRepository.findByReceiverId(id, pageable);
+
+        Map<String, Object> response = new HashMap<>();
+
+        for (Transaction tranx:result.getContent()) {
+            System.out.println(tranx.getAmount());
+        }
+
+        response.put("data", result.getContent());
+        response.put("draw", draw);
+        response.put("recordsTotal", result.getTotalElements());
+        response.put("recordsFiltered", result.getTotalElements());
+
+        return response;
     }
 
     public ResponseEntity<ResponseModel> findByTransactionId(String tnxId){

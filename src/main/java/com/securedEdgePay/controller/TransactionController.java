@@ -61,10 +61,28 @@ public class TransactionController {
         return transactionService.findByTransactionId(transactionId);
     }
 
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    public String getById(@RequestParam String id, Principal principal, Model model){
+        ResponseModel responseModel = transactionService.findByTransactionId(id).getBody();
+
+        model.addAttribute("transaction", (Transaction)responseModel.getObject());
+
+        return "transactionDetails";
+    }
+
     @RequestMapping(value = "/fetch/nin", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity getByNIN(@RequestParam String nin, Principal principal){
-        return transactionService.findByReceiverId(nin);
+//    public ResponseEntity getByNIN(@RequestParam String nin, Principal principal){
+//        return transactionService.findByReceiverId(nin);
+//    }
+    public Map getByNIN(Principal principal, @RequestParam Map<String, String> allRequestParams){
+
+        int draw = Integer.parseInt(allRequestParams.get("draw"));
+        int start = Integer.parseInt(allRequestParams.get("start"));
+        int length = Integer.parseInt(allRequestParams.get("length"));
+        String id = allRequestParams.get("id");
+
+        return transactionService.findByReceiverId(id, start/length, length, draw);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.GET)

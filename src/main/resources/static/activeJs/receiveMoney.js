@@ -14,18 +14,6 @@ $(document).ready( function () {
     $('#wallet').on('click', function(){
         send();
     });
-
-    $('#endSend').on('click', function(){
-        endPay();
-    });
-
-    $('#card').on('click', function(){
-        payWithPaystack();
-    });
-
-    $('#qrcode').on('click', function(){
-        qrPayment();
-    });
 });
 
 function send(){
@@ -181,124 +169,66 @@ function biometrics(){
           text: "Biometrics Successfully Verified",
           icon: "success",
         });
-
-        /*Call all transactions for the NIN*/
-        var url = "/transaction/fetch/nin";
-//        nin
-
-        var id = document.getElementById('id').value;
-        url += "?nin=" + id;
-//        var data = {
-//            "nin" : id
-//        };
-
-        $.ajax({
-        url: url,
-        dataType: 'json',
-        type: 'get',
-        contentType: 'application/json',
-//        data: JSON.stringify(data),
-        processData: false,
-
-        success: function( data, textStatus, jQxhr ){
-            console.log(data);
-//            var responseCode = data.responseCode;
-//            if (responseCode === "00"){
-//                var name = data.data.firstName + ' ' + data.data.middleName + ' ' + data.data.lastName;
-//
-//                swal({
-//                  title: "Verified!",
-//                  text: name,
-//                  icon: "success",
-//                });
-//
-//                identity.value = data.data.nin;
-//                rname.value = name;
-//
-//                verify.style.display = "none";
-//                bio.style.display = "block";
-//
-//            }else{
-//                swal({
-//                  title: "Failed!",
-//                  text: "Verification of " + id + " Failed",
-//                  icon: "error",
-//                });
-//
-//                verify.style.display = "block";
-//                pay.style.display = "none";
-//            }
-
-        },
-        error: function( data, textStatus, errorThrown ){
-            console.log(textStatus);
-            console.log( errorThrown );
-            console.log(data);
-
-            swal({
-              title: "Failed!",
-              text: data.responseMessage,
-              icon: "error",
-            });
-
-//            verify.style.display = "block";
-//            pay.style.display = "none";
-        }
-    });
+        document.getElementById("first").style.display = "none";
+    loadDT();
+        document.getElementById("second").style.display = "block";
     }, 2000);
 }
 
-function endPay(){
-    document.getElementById('verification').style.display = "none";
-    document.getElementById('makepayment').style.display = "none";
+function loadDT(){
+    var id = document.getElementById('id').value;
+    var data = {
+        "id" : id
+    }
 
-    document.getElementById('rid').value = document.getElementById('identity').value;
-    document.getElementById('rName').value = document.getElementById('surname').value + ", " + document.getElementById('fname').value + " " + document.getElementById('mname').value;
-    document.getElementById('rAmount').value = document.getElementById('amount').value;
-    document.getElementById('rFee').value = '50.00';
-    var sell = parseFloat(document.getElementById('amount').value) + 50.00;
-    console.log(sell);
-    document.getElementById('rPay').value = sell;
+    console.log(data);
 
+    var table = $('#transactionTable').DataTable({
+        "destroy": true,
+        "responsive": true,
+        "processing":true,
+            "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '},
+        "serverSide": true,
+        "bFilter": false,
+        "lengthMenu": [[10, 25, 50, 100, 200], [10, 25, 50, 100, "All"]],
+        "ajax": {
+            "url": "/transaction/fetch/nin",
+            "data": data
+        },
+        dom: 'Bfrltip',
+        lengthChange: true,
 
-    document.getElementById('payMode').style.display = "block";
-    document.getElementById('details').style.display = "block";
+        buttons: [
+                  { "extend": 'copy', "text":'Copy to Clipboard',"className": 'btn btn-default btn-md' },
+                    { "extend": 'pdf', "text":'Export PDF',"className": 'btn btn-success btn-md' },
+                    { "extend": 'excel', "text":'Export Excel',"className": 'btn btn-danger btn-md' },
+                    { "extend": 'csv', "text":'Export CSV',"className": 'btn btn-success btn-md' },
+                    { "extend": 'print', "text":'Print',"className": 'btn btn-primary btn-md' },
+                    { "extend": 'colvis', "text":'Show/Hide Columns',"className": 'btn btn-warning btn-md' }
+                    /*'copy',  'excel',   'csv',   'pdf', 'print', 'colvis'*/
+                ],
+        "aaData":data,
+        "aoColumns": [
+            { "data" : null, render: function(data, type, row){return '<a href ="/transaction/details?id=' + data.transactionId + ' ">' + data.transactionId + '</a>';}},
+            { "data": "senderName"},
+            { "data": "senderPhone"},
+            { "data": "receiverId"},
+            { "data": "receiverIdType" },
+            { "data" : "receiverName" },
+            { "data" : "receiverPhone" },
+            { "data": "amount"/*, 'render': $.fn.dataTable.render.number( ',', '.', 2, '₦' )*/},
+            { "data": "status.value",
+              "render": function(data,type, full, meta){
+                       return '<span class="label label-danger">' + data.toUpperCase() + '</span>';
+              }
+            },
 
+            { "data": "transactionInitiationDate" },
+            { "data" : "valueReceivedDate" }
+        ]
+    })
 
-}
-
-function payWithPaystack(){
-
-    var amount = parseFloat(document.getElementById('rPay').value) * 100;
-    var senderName = document.getElementById('senderName').value;
-    var senderPhone = document.getElementById('senderPhone').value;
-    var senderEmail = document.getElementById('senderEmail').value;
-
-    var handler = PaystackPop.setup({
-      key: 'pk_test_59b2c668b54f5de36ef15b92c218000c8993cfe4',
-      email: senderEmail,
-      amount: amount,
-      ref: 'EP'+new Date().getTime(), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-      metadata: {
-         custom_fields: [
-            {
-                display_name: senderName,
-                variable_name: "mobile_number",
-                value: "+234" + senderPhone.slice(1, 10)
-            }
-         ]
-      },
-      callback: function(response){
-          alert('success. transaction ref is ' + response.reference);
-      },
-      onClose: function(){
-          alert('window closed');
-      }
-    });
-    handler.openIframe();
-  }
-
-
-function qrPayment(){
-    $('#exampleModalCenter').modal('show');
+    table.buttons().container()
+      .insertBefore( '#filtery' );
 }

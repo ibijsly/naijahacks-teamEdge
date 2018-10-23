@@ -41,7 +41,7 @@ public class AuthService {
 
             ObjectMapper objectMapper = new ObjectMapper();
 
-            HttpResponse<JsonNode> response = Unirest.post("http://localhost:9000/oauth/token")
+            HttpResponse<JsonNode> response = Unirest.post("http://localhost:8080/oauth/token")
                     .header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED.toString())
                     .basicAuth("clientId", "12345")
                     .fields(map)
