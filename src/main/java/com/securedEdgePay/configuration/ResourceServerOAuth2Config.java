@@ -21,7 +21,6 @@ public class ResourceServerOAuth2Config extends ResourceServerConfigurerAdapter 
                 .requestMatchers()
                 .antMatchers("/api/v1/**").and().authorizeRequests()
                 .antMatchers("/api/v1/login").permitAll()
-                .antMatchers("/api/v1/user").permitAll()
                 .anyRequest().authenticated();
     }
 }

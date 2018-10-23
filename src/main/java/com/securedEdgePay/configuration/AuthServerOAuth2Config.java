@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
@@ -28,6 +30,9 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    DataSource dataSource;
+
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -39,15 +44,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients
-                .inMemory()
-                .withClient("clientId")
-                .secret("$2a$10$dhwmkuYBCrjnZuwAADZcduUi5SGI.zNsGWb9czGWUC0VtsyanPHYm")
-                .scopes("read_write")
-                .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(86000)
-                .refreshTokenValiditySeconds(860000)
-                .resourceIds("resourceId");
+        clients.jdbc(dataSource);
     }
 
     @Override
