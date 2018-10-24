@@ -19,6 +19,26 @@ function cashout(){
 
         success: function( data, textStatus, jQxhr ){
             console.log(data);
+            var responseCode = data.responseCode;
+                if (responseCode === "00"){
+                    swal({
+                      title: "Received",
+                      text: data.responseMessage,
+                      icon: "success",
+                    }).then((value) => {
+                        location.reload();
+                    });
+
+                }else{
+                    swal({
+                      title: "Failed!",
+                      text: data.responseMessage,
+                      icon: "error",
+                    });
+
+                    verify.style.display = "none";
+                    pay.style.display = "block";
+                }
 //            var responseCode = data.responseCode;
 //            if (responseCode === "00"){
 //                var name = data.data.firstName + ' ' + data.data.middleName + ' ' + data.data.lastName;
@@ -52,6 +72,15 @@ function cashout(){
             console.log( errorThrown );
             console.log( data );
 
+            swal({
+              title: "Failed!",
+              text: data.responseMessage,
+              icon: "error",
+            });
+
+            verify.style.display = "none";
+            pay.style.display = "block";
+
 //            swal({
 //              title: "Failed!",
 //              text: data.responseMessage,
@@ -62,4 +91,8 @@ function cashout(){
 //            pay.style.display = "none";
         }
     });
+}
+
+function myFunction(message){
+    swal(message);
 }

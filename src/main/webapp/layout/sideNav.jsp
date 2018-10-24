@@ -7,6 +7,13 @@
          </span>
          </a>
       </li>
+      <li>
+           <a href="/user/view">
+           <i class="fa fa-user-circle"></i><span>Admin</span>
+           <span class="pull-right-container">
+           </span>
+           </a>
+      </li>
       <li class="treeview">
          <a href="#">
          <i class="fa fa-users"></i><span>Agents</span>
@@ -18,14 +25,28 @@
             <li><a href="/agent/add">Add</a></li>
             <li><a href="#">List</a></li>
             <li><a href="#">Groups</a></li>
+            <li><a href="#">Fund Wallet</a></li>
          </ul>
       </li>
-      <li>
-           <a href="/user/view">
-           <i class="fa fa-user-circle"></i><span>Admin</span>
-           <span class="pull-right-container">
-           </span>
-           </a>
+      <li class="treeview">
+         <a href="#">
+         <i class="fa fa-credit-card"></i><span>Bills & Self Services</span>
+         <span class="pull-right-container">
+         <i class="fa fa-angle-left pull-right"></i>
+         </span>
+         </a>
+         <ul class="treeview-menu">
+            <li><a href="/transaction/deposit">Send Money (NIN)</a></li>
+            <li><a href="/transaction/receive">Receive Money (NIN)</a></li>
+            <li><a href="#">DSTV Cable Subscription</a></li>
+            <li><a href="#">GOTV Cable Subscription</a></li>
+            <li><a href="#">StarTimes Cable Subscription</a></li>
+            <li><a href="#">Airtime</a></li>
+            <li><a href="#">Data Subscription</a></li>
+            <li><a href="#">Power Bills</a></li>
+            <li><a href="#">Bank Funds Transfer</a></li>
+
+         </ul>
       </li>
       <li>
          <a href="#">
@@ -34,6 +55,8 @@
              </span>
          </a>
       </li>
+
+      <!--
       <li>
          <a href="/transaction/deposit">
              <i class="fa fa-stop-circle"></i> <span>Send Money</span>
@@ -48,6 +71,8 @@
              </span>
          </a>
       </li>
+      -->
+
       <li class="treeview">
          <a href="#">
          <i class="fa fa-file-text"></i><span>Report</span>

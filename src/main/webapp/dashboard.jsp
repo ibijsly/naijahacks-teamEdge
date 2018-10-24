@@ -13,7 +13,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>EdgePay Admin Panel</title>
       <!-- Favicon and touch icons -->
-      <link rel="shortcut icon" href="assets/dist/img/ico/favicon.png" type="image/x-icon">
+      <link rel="shortcut icon" href="/assets/dist/img/ico/favicon.png" type="image/x-icon">
       <!-- Start Global Mandatory Style
          =====================================================================-->
       <!-- jquery-ui css -->
@@ -45,9 +45,9 @@
       <!-- Start Theme Layout Style
          =====================================================================-->
       <!-- Theme style -->
-      <link href="assets/dist/css/stylecrm.css" rel="stylesheet" type="text/css"/>
+      <link href="/assets/dist/css/stylecrm.css" rel="stylesheet" type="text/css"/>
       <!-- Theme style rtl -->
-      <!--<link href="assets/dist/css/stylecrm-rtl.css" rel="stylesheet" type="text/css"/>-->
+      <!--<link href="/assets/dist/css/stylecrm-rtl.css" rel="stylesheet" type="text/css"/>-->
       <!-- End Theme Layout Style
          =====================================================================-->
    </head>
@@ -400,7 +400,7 @@
       <!-- FastClick -->
       <script src="assets/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
       <!-- CRMadmin frame -->
-      <script src="assets/dist/js/custom.js" type="text/javascript"></script>
+      <script src="/assets/dist/js/custom.js" type="text/javascript"></script>
       <!-- End Core Plugins
          =====================================================================-->
       <!-- Start Page Lavel Plugins
@@ -417,7 +417,7 @@
       <!-- Start Theme label Script
          =====================================================================-->
       <!-- Dashboard js -->
-      <script src="assets/dist/js/dashboard.js" type="text/javascript"></script>
+      <script src="/assets/dist/js/dashboard.js" type="text/javascript"></script>
       <!-- End Theme label Script
          =====================================================================-->
       <script>

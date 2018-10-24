@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <head>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -173,24 +177,39 @@
                               </div>
                               <div class="form-group">
                                  <label>Sender Email</label>
-                                 <input type="email" class="form-control" placeholder="09089898989" id = "senderEmail" required>
+                                 <input type="email" class="form-control" placeholder="whaever@gmail.com" id = "senderEmail" required>
                               </div>
                               <div class="form-group">
                                  <label>Amount</label>
                                  <input type="number" class="form-control" min = "10" placeholder="60000" id = "amount" required>
                               </div>
 
-                              <!-- Agent -->
-                              <div class="form-group">
-                                   <button type="button" class="btn btn-add" id = "send"><i class="fa fa-check"></i> Send
-                                   </button>
-                              </div>
+                            <c:choose>
+                                <c:when test="${role !=null}">
+                                    <c:if test="${role.equals('AGENT')}">
+                                        <!-- Agent -->
+                                        <div class="form-group">
+                                           <button type="button" class="btn btn-add" id = "send"><i class="fa fa-check"></i> Send
+                                           </button>
+                                      </div>
+                                    </c:if>
+                                    <c:if test="${role.equals('ENDUSER') || role.equals('Undefined')}">
+                                        <!-- End User -->
+                                      <div class="form-group">
+                                           <button type="button" class="btn btn-add" id = "endSend"><i class="fa fa-check"></i> Send
+                                           </button>
+                                      </div>
+                                    </c:if>
+                                </c:when>
+                                <c:when test="${role ==null  || role.isEmpty()}">
+                                    <!-- End User -->
+                                  <div class="form-group">
+                                       <button type="button" class="btn btn-add" id = "endSend"><i class="fa fa-check"></i> Send
+                                       </button>
+                                  </div>
+                                </c:when>
+                            </c:choose>
 
-                              <!-- End User -->
-                              <div class="form-group">
-                                   <button type="button" class="btn btn-add" id = "endSend"><i class="fa fa-check"></i> Send
-                                   </button>
-                              </div>
                             </form>
                         </div>
                      </div>
@@ -271,7 +290,7 @@
                        <img src = "/assets/image/onlineEnvoy.png" />
                      </div>
                      <div class="modal-footer">
-                       <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "done">Close</button>
+                       <button type="button" class="btn btn-primary" data-dismiss="modal" id = "done">Done</button>
                      </div>
                    </div>
                  </div>

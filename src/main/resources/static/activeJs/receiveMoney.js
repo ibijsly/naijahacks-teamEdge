@@ -210,7 +210,7 @@ function loadDT(){
                 ],
         "aaData":data,
         "aoColumns": [
-            { "data" : null, render: function(data, type, row){return '<a href ="/transaction/details?id=' + data.transactionId + ' ">' + data.transactionId + '</a>';}},
+            { "data" : null, render: function(data, type, row){return '<a href ="/transaction/details?id=' + data.transactionId + '" target="_blank" >' + data.transactionId + '</a>';}},
             { "data": "senderName"},
             { "data": "senderPhone"},
             { "data": "receiverId"},
@@ -220,7 +220,12 @@ function loadDT(){
             { "data": "amount"/*, 'render': $.fn.dataTable.render.number( ',', '.', 2, '₦' )*/},
             { "data": "status.value",
               "render": function(data,type, full, meta){
-                       return '<span class="label label-danger">' + data.toUpperCase() + '</span>';
+                    if(data.toUpperCase() == 'SENT')
+                       return '<span class="label label-warning">' + data.toUpperCase() + '</span>';
+                    else if(data.toUpperCase() == 'RECEIVED')
+                        return '<span class="label label-success">' + data.toUpperCase() + '</span>';
+                    else
+                        return '<span class="label label-danger">' + data.toUpperCase() + '</span>';
               }
             },
 

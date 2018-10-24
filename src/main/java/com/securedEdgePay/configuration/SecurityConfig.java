@@ -57,8 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/verify/**").permitAll()
                 .antMatchers("/admin/fetch").permitAll()
                 .antMatchers("/admin/create").permitAll()
-                .antMatchers("/admin/details").permitAll()
-                .antMatchers("/**").permitAll()
+//                .antMatchers("/**").permitAll()
+                .antMatchers("/transaction/deposit").permitAll()
+                .antMatchers("/activeJs/**").permitAll()
+                .antMatchers("/transaction/details").authenticated()
 
                 .anyRequest().authenticated()
 

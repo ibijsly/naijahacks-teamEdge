@@ -71,7 +71,7 @@
             <section class="content">
                <div class="row">
                   <!-- Form controls -->
-                  <div class="col-sm-12">
+                  <div class="col-sm-8 col-sm-offset-2">
                      <div class="panel panel-bd lobidrag">
                         <div class="panel-heading">
                            <div class="btn-group" id="buttonlist"> 
@@ -81,7 +81,7 @@
                         </div>
                         <div class="panel-body">
                             <div id = "message"></div>
-                           <form class="col-sm-6">
+                           <form class="col-sm-8">
                               <div class="form-group">
                                  <label>First Name</label>
                                  <input type="text" class="form-control" placeholder="Enter First Name" id = "firstname" required>
@@ -198,6 +198,9 @@
       <script src="/assets/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
       <!-- CRMadmin frame -->
       <script src="/assets/dist/js/custom.js" type="text/javascript"></script>
+      <!-- Sweetalert -->
+            <script src="/assets/sweetalert/sweetalert.js" type="text/javascript"></script>
+
       <!-- End Core Plugins
          =====================================================================-->
       <!-- Start Theme label Script

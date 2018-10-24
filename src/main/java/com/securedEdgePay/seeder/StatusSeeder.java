@@ -1,6 +1,5 @@
 package com.securedEdgePay.seeder;
 
-import com.github.javafaker.Faker;
 import com.securedEdgePay.model.Status;
 import com.securedEdgePay.repository.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;

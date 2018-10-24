@@ -111,9 +111,20 @@
                               </table>
                            </div>
                            <div style = "text-align: center;">
-                                <!--<a href = "#" class = "btn btn-primary">Cash Out</a>-->
                                 <input type = "hidden" value = "${transaction.transactionId}" id = "tid"/>
-                                <button type="button" class="btn btn-add" id = "cashout"><i class="fa fa-check"></i> CashOut </button>
+                                <c:choose>
+                                    <c:when test="${transaction.status.value !=null && !transaction.status.value.isEmpty()}">
+                                        <c:if test="${transaction.status.value.contains('Received')}">
+                                            <button type="button" class="btn btn-add" onclick="myFunction('Already Received')"><i class="fa fa-check"></i> CashOut </button>
+                                        </c:if>
+                                        <c:if test="${transaction.status.value.contains('Sent')}">
+                                            <button type="button" class="btn btn-add" id = "cashout"><i class="fa fa-check"></i> CashOut </button>
+                                        </c:if>
+                                        <c:if test="${transaction.status.value.contains('Pending')}">
+                                            <button type="button" class="btn btn-add" onclick="myFunction('This transaction is yet to be confirmed')"><i class="fa fa-check"></i> CashOut </button>
+                                        </c:if>
+                                    </c:when>
+                                </c:choose>
                            </div>
                         </div>
                      </div>
@@ -124,7 +135,7 @@
          </div>
          <!-- /.content-wrapper -->
          <footer class="main-footer">
-            <strong>Copyright &copy; 2016-2017 <a href="#">thememinister</a>.</strong> All rights reserved.
+            <%@ include file="/layout/footer.jsp" %>
          </footer>
       </div>
       <!-- ./wrapper -->
@@ -147,6 +158,9 @@
       <!-- CRMadmin frame -->
       <script src="/assets/dist/js/custom.js" type="text/javascript"></script>
       <!-- End Core Plugins
+      <!-- Sweetalert -->
+            <script src="/assets/sweetalert/sweetalert.js" type="text/javascript"></script>
+
          =====================================================================-->
       <!-- Start Theme label Script
          =====================================================================-->

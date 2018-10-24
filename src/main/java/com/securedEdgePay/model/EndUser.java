@@ -3,6 +3,7 @@ package com.securedEdgePay.model;
 import javax.persistence.*;
 
 @Entity
+//@Table(name = "end")
 public class EndUser extends User{
     private String nin;
     private String vin;

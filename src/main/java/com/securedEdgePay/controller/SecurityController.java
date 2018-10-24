@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class SecurityController {
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = {"/login", "/"})
     public ModelAndView getLoginForm(
             @RequestParam(required = false) String authfailed, String logout, String denied, String forgot, String change, String activation) {
 

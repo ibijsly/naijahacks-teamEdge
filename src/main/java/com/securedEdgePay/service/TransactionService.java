@@ -14,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TransactionService {
@@ -33,26 +30,38 @@ public class TransactionService {
         this.walletService = walletService;
     }
 
-    public ResponseEntity<ResponseModel> addTransaction(Transaction transaction, Principal principal){
+    public ResponseEntity<ResponseModel> addTransaction(Transaction transaction){
         try{
-//            User user = userService.getUserByUsername(principal.getName());
-//            transaction.setSender(user);
             transaction.setTransactionId("EP" + System.currentTimeMillis());
 
-//            if (user.hasRole("ROLE_AGENT")){
             if (transaction.getSender().hasRole("ROLE_AGENT")){
                 //Agent wallet should be debited
                 if (!walletService.debitWallet(transaction.getSender(), transaction.getAmount() + calculateConvenienceFee(transaction))){
                     return new ResponseEntity<ResponseModel>( new ResponseModel("92", "Insufficient Wallet Fund", transaction.getSender()), HttpStatus.OK);
                 }
-//            }else if (user.hasRole("ROLE_ENDUSER")){
             }else if (transaction.getSender().hasRole("ROLE_ENDUSER")){
+                if (!walletService.debitWallet(transaction.getSender(), transaction.getAmount() + calculateConvenienceFee(transaction))){
+                    return new ResponseEntity<ResponseModel>( new ResponseModel("92", "Insufficient Wallet Fund", transaction.getSender()), HttpStatus.OK);
+                }
                 transaction.setSenderName(transaction.getSender().getFullName());
             }else{
                 return new ResponseEntity<ResponseModel>( new ResponseModel("99", "Unauthorized", transaction.getSender()), HttpStatus.UNAUTHORIZED);
             }
             transaction.setStatus(statusRepository.findByValue("Sent"));
 
+            transactionRepository.save(transaction);
+
+            return new ResponseEntity<ResponseModel>( new ResponseModel("00", "Success", transaction), HttpStatus.OK);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return new ResponseEntity<ResponseModel>( new ResponseModel("99", "Error Occurred", transaction), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<ResponseModel> addOnlineTransaction(Transaction transaction){
+        try{
+
+            transaction.setStatus(statusRepository.findByValue("Sent"));
             transactionRepository.save(transaction);
 
             return new ResponseEntity<ResponseModel>( new ResponseModel("00", "Success", transaction), HttpStatus.OK);
@@ -100,9 +109,6 @@ public class TransactionService {
 
         Map<String, Object> response = new HashMap<>();
 
-        for (Transaction tranx:result.getContent()) {
-            System.out.println(tranx.getAmount());
-        }
         response.put("data", result.getContent());
         response.put("draw", draw);
         response.put("recordsTotal", result.getTotalElements());
@@ -161,8 +167,9 @@ public class TransactionService {
     }
 
     public double calculateConvenienceFee(Transaction transaction){
-        double rate = 5d / 100;
         return 50;
+
+//        double rate = 5d / 100;
 //        return rate * transaction.getAmount();
 
     }
@@ -180,13 +187,14 @@ public class TransactionService {
                 transaction.setStatus(statusRepository.findByValue("Received"));
                 transaction.setDispatcherAgent(user);
                 transaction.setValueReceivedDate(new Date());
+                transaction.setFee(calculateConvenienceFee(transaction));
                 transactionRepository.save(transaction);
 
                 /*
                 *Send SMS to both the sender and the receiver
                 * */
 
-                return new ResponseEntity(new ResponseModel("00", "Success", transaction), HttpStatus.OK);
+                return new ResponseEntity(new ResponseModel("00", "Transaction Value", transaction), HttpStatus.OK);
             }else{
                 return new ResponseEntity(new ResponseModel("99", "Failed", transaction), HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -195,7 +203,7 @@ public class TransactionService {
             /*This is the Receiver Accepting the money into his wallet
              * The value should be credited to the endUser's wallet*/
 
-            if (walletService.creditWallet(user, transaction.getAmount() - calculateConvenienceFee(transaction))){
+            if (walletService.creditWallet(user, transaction.getAmount())){
                 /*Update the transaction*/
                 transaction.setStatus(statusRepository.findByValue("Received"));
                 transaction.setDispatcherAgent(user);
@@ -206,7 +214,7 @@ public class TransactionService {
                  *Send SMS to both the sender and the receiver
                  * */
 
-                return new ResponseEntity(new ResponseModel("00", "Success", transaction), HttpStatus.OK);
+                return new ResponseEntity(new ResponseModel("00", "Transaction Value Credited to your wallet", transaction), HttpStatus.OK);
             }else{
                 return new ResponseEntity(new ResponseModel("99", "Failed", transaction), HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -215,4 +223,20 @@ public class TransactionService {
         }
 
     }
+
+    public ResponseEntity<ResponseModel> unclaimedFunds(User user){
+
+        List<Transaction> transactions = transactionRepository.findByStatus(statusRepository.findByValue("Sent"));
+        return new ResponseEntity<ResponseModel>(new ResponseModel("00", "Success", transactions), HttpStatus.OK);
+    }
+
+    public ResponseEntity<ResponseModel> recentTransactions(User user){
+        try {
+            List<Transaction> transactions = transactionRepository.findBySender(user, new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "id")));
+            return new ResponseEntity<ResponseModel>(new ResponseModel("00", "Success", transactions), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<ResponseModel>(new ResponseModel("99", "Failed", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

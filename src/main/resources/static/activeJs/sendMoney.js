@@ -22,6 +22,10 @@ $(document).ready( function () {
     $('#qrcode').on('click', function(){
         qrPayment();
     });
+
+    $('#done').on('click', function(){
+        onlinePayment('EP'+new Date().getTime());
+    });
 });
 
 function send(){
@@ -67,10 +71,14 @@ function send(){
                   title: "Sent!",
                   text: "Transaction Successful",
                   icon: "success",
+                }).then((value) => {
+                    location.reload();
                 });
 
-                verify.style.display = "block";
-                pay.style.display = "none";
+//                verify.style.display = "block";
+//                pay.style.display = "none";
+
+
             }else{
                 swal({
                   title: "Failed!",
@@ -99,6 +107,7 @@ function send(){
 
 
 function verify(){
+    alert("I got here");
     var url = "/verify";
 
     var verify = document.getElementById('verification')
@@ -198,12 +207,13 @@ function payWithPaystack(){
     var senderName = document.getElementById('senderName').value;
     var senderPhone = document.getElementById('senderPhone').value;
     var senderEmail = document.getElementById('senderEmail').value;
+    var tid = 'EP'+new Date().getTime();
 
     var handler = PaystackPop.setup({
       key: 'pk_test_59b2c668b54f5de36ef15b92c218000c8993cfe4',
       email: senderEmail,
       amount: amount,
-      ref: 'EP'+new Date().getTime(), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+      ref: tid, // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
       metadata: {
          custom_fields: [
             {
@@ -214,7 +224,8 @@ function payWithPaystack(){
          ]
       },
       callback: function(response){
-          alert('success. transaction ref is ' + response.reference);
+//          alert('success. transaction ref is ' + response.reference);
+          onlinePayment(tid);
       },
       onClose: function(){
           alert('window closed');
@@ -223,7 +234,84 @@ function payWithPaystack(){
     handler.openIframe();
   }
 
-
 function qrPayment(){
     $('#exampleModalCenter').modal('show');
+}
+
+function onlinePayment(txnid){
+//    swal(txnid);
+        var url = "/transaction/addOnline";
+
+        var identity = document.getElementById('identity').value;
+        var surname = document.getElementById('surname').value;
+        var fname = document.getElementById('fname').value;
+        var mname = document.getElementById('mname').value;
+        var phone = document.getElementById('phone').value;
+        var senderName = document.getElementById('senderName').value;
+        var senderPhone = document.getElementById('senderPhone').value;
+        var amount = document.getElementById('amount').value;
+        var idType = document.getElementById('idType').value;
+
+        var data = {
+            "amount" : amount,
+            "receiver" : surname + ', ' + mname + ' ' + fname,
+            "receiverPhone" : phone,
+            "senderName" : senderName,
+            "senderPhone": senderPhone,
+            "idType": idType,
+            "id" : identity,
+            "tid":txnid
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            processData: false,
+
+            success: function( data, textStatus, jQxhr ){
+                console.log(data);
+
+                var responseCode = data.responseCode;
+                if (responseCode === "00"){
+                    swal({
+                      title: "Sent!",
+                      text: "Transaction Successful",
+                      icon: "success",
+                    }).then((value) => {
+                        location.reload();
+                    });
+
+    //                verify.style.display = "block";
+    //                pay.style.display = "none";
+
+
+                }else{
+                    swal({
+                      title: "Failed!",
+                      text: data.responseMessage,
+                      icon: "error",
+                    });
+
+                    verify.style.display = "none";
+                    pay.style.display = "block";
+                }
+            },
+            error: function( data, textStatus, errorThrown ){
+                console.log( errorThrown );
+                console.log(textStatus);
+                swal({
+                  title: "Failed!",
+                  text: data.responseMessage,
+                  icon: "error",
+                });
+
+                verify.style.display = "none";
+                pay.style.display = "block";
+            }
+        });
 }

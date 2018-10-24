@@ -1,10 +1,10 @@
 <a href="index-2.html" class="logo">
    <!-- Logo -->
    <span class="logo-mini">
-   <img src="assets/dist/img/mini-logo.png" alt="">
+   <img src="/assets/dist/img/mini-logo.png" alt="">
    </span>
    <span class="logo-lg">
-   <img src="assets/dist/img/logo.png" alt="">
+   <img src="/assets/dist/img/logo.png" alt="">
    </span>
 </a>
 <!-- Header Navbar -->
@@ -44,7 +44,7 @@
          <!-- user -->
          <li class="dropdown dropdown-user">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <img src="assets/dist/img/avatar5.png" class="img-circle" width="45" height="45" alt="user"></a>
+            <img src="/assets/dist/img/avatar5.png" class="img-circle" width="45" height="45" alt="user"></a>
             <ul class="dropdown-menu" >
                <li>
                   <a href="#">
